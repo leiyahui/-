@@ -20,19 +20,19 @@ void close_logfile_fd();
 void out_put_log(LogLevel l, char *file, int lineno, const char *func_name, char *logformat, ...);
 
 #define log_error(log_fmt, ...) \
-	do {out_put_log(LL_ERROR, __FILE__, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
+	do {out_put_log(LL_ERROR, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
 
 #define log_warn(log_fmt, ...) \
-	do {out_put_log(LL_WARNING, __FILE__, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
+	do {out_put_log(LL_WARNING, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
 
 #define log_info(log_fmt, ...) \
-	do {out_put_log(LL_INFO, __FILE__, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
+	do {out_put_log(LL_INFO, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
 
 #define log_trace(log_fmt, ...) \
-	do {out_put_log(LL_TRACE, __FILE__, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
+	do {out_put_log(LL_TRACE, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
 
 #define log_debug(log_fmt, ...) \
-	do {out_put_log(LL_DEBUG, __FILE__, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
+	do {out_put_log(LL_DEBUG, __LINE__, __FUNCTION__, log_fmt, __VA_ARGS__);} while (0)
 
 
 

@@ -131,11 +131,10 @@ int get_min_hand(int card_array[], int total_begin, int total_end)
 				else {
 					log_debug("                    may have array start :%d,end :%d", start, i - 1);
 				}
-				single_even_start = single_even_end = 0;
 				for (m = start; m <= i - 5; m++) {
 					for (n = m + 4; n < i; n++) {
-						tmp_single_even.single_even[g_call_level].start_value = single_even_start;
-						tmp_single_even.single_even[g_call_level].end_value = single_even_end;
+						tmp_single_even.single_even[g_call_level - 1].start_value = m;
+						tmp_single_even.single_even[g_call_level - 1].end_value = n;
 						if (g_call_level == 1) {
 							log_debug("    possible single even :%d,end :%d", m, n);
 						}
@@ -153,35 +152,11 @@ int get_min_hand(int card_array[], int total_begin, int total_end)
 						}
 						tmp_hand_num = get_min_hand(new_card_array, total_begin, total_end);
 
-						if (g_call_level == 1) {
-							log_debug("    tmp hand: %d", tmp_hand_num);
-						}
-						else if (g_call_level == 2) {
-							log_debug("          tmp hand: %d", tmp_hand_num);
-						}
-						else {
-							log_debug("                       tmp hand: %d", tmp_hand_num);
-						}
 						if (tmp_hand_num + 1 < hand_num) {
 							hand_num = tmp_hand_num + 1;
-							single_even_start = m;
-							single_even_end = n;
+							has_single_even = 1;
 						}
 					}
-				}
-				if (single_even_end != 0 && single_even_start != 0) {
-					if (g_call_level == 1) {
-						log_debug("single even is:%d, %d", single_even_start, single_even_end);
-					}
-					else if (g_call_level == 2) {
-						log_debug("        single even is : %d, %d", single_even_start, single_even_end);
-					}
-					else {
-						log_debug("                    single even is : %d, %d", single_even_start, single_even_end);
-					}
-					has_single_even = 1;
-					//tmp_single_even.single_even[g_call_level].start_value = single_even_start;
-					//tmp_single_even.single_even[g_call_level].end_value = single_even_end;
 				}
 				break;
 			}
@@ -193,19 +168,27 @@ int get_min_hand(int card_array[], int total_begin, int total_end)
 			}
 		}
 	}
-	g_call_level--;
 	if (!has_single_even) {
 		if (hand_num + g_call_level <= g_min_hand_num) {
 			g_min_hand_num = hand_num + g_call_level;
-			for (t = 0; i <= tmp_single_even.count; t++) {
+			if (g_call_level == 1) {
+				log_debug("write info is:%d, %d", g_call_level, g_min_hand_num);
+			}
+			else if (g_call_level == 2) {
+				log_debug("        write info is:%d, %d", g_call_level, g_min_hand_num);
+			}
+			else {
+				log_debug("                    write info is:%d, %d", g_call_level, g_min_hand_num);
+			}
+			for (t = 0; t < g_call_level - 1; t++) {
 				single_even.single_even[t].start_value = tmp_single_even.single_even[t].start_value;
 				single_even.single_even[t].end_value = tmp_single_even.single_even[t].end_value;
-				log_debug("tmp single even:%d %d", tmp_single_even.single_even[t].start_value, tmp_single_even.single_even[t].end_value);
+				log_debug("single even is:%d %d", tmp_single_even.single_even[t].start_value, tmp_single_even.single_even[t].end_value);
 			}
-			single_even.count = tmp_single_even.count;
+			single_even.count = g_call_level - 1;
 		}
 	}
-
+	g_call_level--;
 	return hand_num;
 }
 
@@ -250,8 +233,8 @@ void main()
 	card[6] = 6;
 	card[7] = 7;
 	card[8] = 8;
-	card[9] = 8;
-	card[10] = 10;
+	card[9] = 10;
+	card[10] = 9;
 	card[11] = 11;
 	card[12] = 12;
 	card[13] = 13;

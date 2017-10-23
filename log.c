@@ -77,7 +77,7 @@ void close_logfile_fd()
 		_close(g_logfile_fd);
 }
 
-void out_put_log(LogLevel l, char *file, int lineno, const char *func_name, char *logformat, ...)
+void out_put_log(LogLevel l, int lineno, const char *func_name, char *logformat, ...)
 {
 	va_list args;
 	int _size;
@@ -102,9 +102,9 @@ void out_put_log(LogLevel l, char *file, int lineno, const char *func_name, char
 		if (g_logfile_fd != -1 && cur_time > 0 && localtime_r(&cur_time, &local_tm) != NULL) {
 #endif
 			agentlog = malloc(LOG_BUFFSIZE + 128);
-			agentlog_len = _snprintf(agentlog, LOG_BUFFSIZE + 128, "%s: %04d-%02d-%02d %02d:%02d:%02d [%s:%d][%s] %s\n", loglevel_to_string(l),
+			agentlog_len = _snprintf(agentlog, LOG_BUFFSIZE + 128, "%s: %04d-%02d-%02d %02d:%02d:%02d [%d][%s] %s\n", loglevel_to_string(l),
 				(1900 + local_tm.tm_year), local_tm.tm_mon + 1, local_tm.tm_mday,
-				local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec, file, lineno, func_name, message);
+				local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec, lineno, func_name, message);
 			if (agentlog_len > 0) {
 				_write(g_logfile_fd, agentlog, agentlog_len);
 			}
